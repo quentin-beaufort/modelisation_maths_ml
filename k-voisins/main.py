@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import math
 import random
 
+fig, ax = plt.subplots()
+
 iris = pandas.read_csv("iris.csv")
 x = iris.loc[:, "petal_length"]
 y = iris.loc[:, "petal_width"]
@@ -38,5 +40,6 @@ plt.scatter(x[lab == 'virginica'], y[lab == 'virginica'], color='r', label='virg
 plt.scatter(x[lab == 'versicolor'], y[lab == 'versicolor'], color='b', label='versicolor')
 plt.scatter(intrus_x, intrus_y, color='black', label=f'résolu:{intrus_type}')
 plt.legend()
+ax.set_aspect(1)
 plt.show()
 plt.close()
