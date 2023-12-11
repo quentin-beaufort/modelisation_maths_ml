@@ -1,1 +1,20 @@
-# modelisation_maths_ml
+= Partitionnement par k-médoïdes
+:toc:
+
+== Introduction
+L'algorithme des k-médoïdes est un algorithme de partionnnement qui vise à diviser un ensemble de données donné en k groupes. Contrairement à l'algorithme des k-moyennes, qui utilise la moyenne des points de données comme centre de groupe, l'algorithme des k-médoïdes utilise les points de données réels comme centres de groupe, en choisissant spécifiquement k points représentatifs de l'ensemble de données.
+
+== Fonctionnement de l'algorithme
+L'algorithme fonctionne comme suit :
+
+. Initialiser k médoïdes de manière aléatoire à partir de l'ensemble de données.
+. Attribuer chaque point de données au médoïde le plus proche sur la base d'une méthode de distance (ici, la distance euclidienne).
+. Pour chaque médoïde, calculer le coût total de l'affectation de tous les points de données à ce médoïde.
+. Remplacer un point de données non médoïde par un médoïde et calculer le nouveau coût total.
+. Si le nouveau coût total est inférieur, conserver l'échange. Dans le cas contraire, annuler l'échange.
+. Répéter les étapes 2 à 5 jusqu'à convergence (c'est-à-dire qu'il n'y a plus d'échanges).
+. Les médioïdes finaux représentent les groupes.
+
+L'algorithme des k-médoïdes présente plusieurs avantages par rapport à celui des k-moyennes, notamment une plus grande résistance aux valeurs aberrantes et la possibilité de traiter des mesures de distance non euclidiennes. Cependant, il peut s'avérer coûteux en termes de calcul, en particulier pour les grands ensembles de données.
+
+A noter qu'il ne s'agit que d'un aperçu de haut niveau de l'algorithme k-medoids. Il existe des variantes et des optimisations qui peuvent être appliquées en fonction des exigences et des contraintes spécifiques du problème en question.
