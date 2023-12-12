@@ -13,6 +13,9 @@ public class ViewPanel extends JPanel {
     ViewPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
         this.track = new Track();
+
+        
+
     }
 
     public void paint(Graphics g) {
