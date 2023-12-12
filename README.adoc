@@ -1,4 +1,6 @@
 = Dossier sur le machine learning
+Quentin Beaufort <quentin.bfrt@gmail.com>; Pierre de Beaumont <pierre.db333@gmail.com>
+
 :toc:
 
 == Introduction
