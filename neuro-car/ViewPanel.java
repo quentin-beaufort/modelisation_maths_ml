@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 public class ViewPanel extends JPanel implements Runnable {
     
+    private final int FPS = 60;
     private final double thicknessSensitivity = 3.0;
     private final double angleSensitivity = 0.2;
     private final boolean loadByDefault = true;
@@ -27,6 +28,7 @@ public class ViewPanel extends JPanel implements Runnable {
     private int lastThickness = 0;
     private int trackPieceId = 0;
     private int mouseX, mouseY;
+    private Car car;
 
     ViewPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -132,6 +134,8 @@ public class ViewPanel extends JPanel implements Runnable {
     public void run() {
         while (this.gameRunning) {
 
+            long start = System.nanoTime();
+
             if (!this.track.closed && currentPoint != null) {
                 if (this.inputs.spaceDown) this.closeTrack();
                 while (track.innerLines.size() < trackPieceId+1) track.innerLines.add(new Line());
@@ -154,9 +158,23 @@ public class ViewPanel extends JPanel implements Runnable {
             if (this.inputs.kDown) {
                 this.newTrack();
             }
+            if (this.track.closed && this.car == null) {
+                this.car = new Car(100, 100);
+            }
 
+            if (this.inputs.z) this.car.accelerate(0.5);
+            if (this.inputs.s) this.car.accelerate(-0.4);
+            if (this.inputs.q) this.car.rotate(-1);
+            if (this.inputs.d) this.car.rotate(1);
+            this.car.update();
             this.repaint();
 
+            long end = System.nanoTime();
+            long delay = (1000000000 / this.FPS) - (end - start);
+            //System.out.println("DeltaTime : " + ((end - start)/1000) + "mms, for " + this.FPS + " fps");
+            try {
+                Thread.sleep(delay/1000000);
+            } catch (Exception e) {}
         }
     }
 
@@ -165,5 +183,6 @@ public class ViewPanel extends JPanel implements Runnable {
         graph.setColor(this.grassColor);
         graph.fillRect(0, 0, 1080, 720);
         track.paint(graph);
+        if (this.car != null) this.car.paint(graph);
     }
 }
