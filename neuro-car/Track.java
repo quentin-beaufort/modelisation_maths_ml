@@ -12,7 +12,7 @@ public class Track {
  
     private Color trackColor = new Color(50, 50, 50);
     private Color grassColor = new Color(0, 150, 0);
-    private ArrayList<Line> innerLines, outerLines;
+    public ArrayList<Line> innerLines, outerLines;
     private Polygon outerTrack, innerTrack;
     public boolean closed;
 
@@ -102,6 +102,10 @@ public class Track {
             e.printStackTrace();
         }
 
+    }
+
+    public void close() {
+        this.closed = true;
     }
 
     private void createTrack() {
