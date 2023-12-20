@@ -19,11 +19,11 @@ public class Track {
     Track() {
         this.innerLines = new ArrayList<Line>(50);
         this.outerLines = new ArrayList<Line>(50);
-    
-        this.loadTrack();
     }
 
-    private void loadTrack() {
+    public void loadTrack() {
+        this.innerLines = new ArrayList<Line>(50);
+        this.outerLines = new ArrayList<Line>(50);
         try (BufferedReader trackDataReader = new BufferedReader(new FileReader("level.track"));) {
 
             String outerLineString = trackDataReader.readLine();
@@ -62,27 +62,15 @@ public class Track {
                 counter++;
                 if (innerLineString.indexOf(";", scIndex+1) != -1) pointData = innerLineString.substring(scIndex+1, innerLineString.indexOf(";", scIndex+1));
             }
-            this.closed = true;
+            this.close();
         } catch (FileNotFoundException fnfe) {
             System.out.println("no Track, starting mouse track creation mode");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.innerTrack = new Polygon();
-        for (Line l : this.innerLines) {
-            this.innerTrack.addPoint(l.a.x, l.a.y);
-            this.innerTrack.addPoint(l.b.x, l.b.y);
-        }
-        
-        this.outerTrack = new Polygon();
-        for (Line l : this.outerLines) {
-            this.outerTrack.addPoint(l.a.x, l.a.y);
-            this.outerTrack.addPoint(l.b.x, l.b.y);
-        }
     }
 
-    private void saveTrack() {
+    public void saveTrack() {
         try (BufferedWriter trackDataWriter = new BufferedWriter(new FileWriter("level.track"))) {
 
             String outerLineString = this.outerLines.get(0).a.x + "," + this.outerLines.get(0).a.y + ";";
@@ -105,6 +93,17 @@ public class Track {
     }
 
     public void close() {
+        this.innerTrack = new Polygon();
+        for (Line l : this.innerLines) {
+            this.innerTrack.addPoint(l.a.x, l.a.y);
+            this.innerTrack.addPoint(l.b.x, l.b.y);
+        }
+        
+        this.outerTrack = new Polygon();
+        for (Line l : this.outerLines) {
+            this.outerTrack.addPoint(l.a.x, l.a.y);
+            this.outerTrack.addPoint(l.b.x, l.b.y);
+        }
         this.closed = true;
     }
 
