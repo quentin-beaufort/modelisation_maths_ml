@@ -159,11 +159,11 @@ public class ViewPanel extends JPanel implements Runnable {
                 this.newTrack();
             }
             if (this.track.closed && this.car == null) {
-                this.car = new Car(100, 100);
+                this.car = new Car();
             }
 
-            if (this.inputs.z) this.car.accelerate(0.5);
-            if (this.inputs.s) this.car.accelerate(-0.4);
+            if (this.inputs.z) this.car.accelerate(1);
+            if (this.inputs.s) this.car.accelerate(-1);
             if (this.inputs.q) this.car.rotate(-1);
             if (this.inputs.d) this.car.rotate(1);
             this.car.update();
