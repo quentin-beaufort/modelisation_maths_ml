@@ -11,17 +11,19 @@ nb_points = 400
 nb_centres = 3
 nb_points_random = int(nb_points // 5)  # On rajoute 1/5 des points totaux en points completement aleatoires
 offset = 2  # On définit un décalage des points par rapport à leur centre
+subplots_counter = 2
+subplots_row_pointer = 1
+subplots_col_pointer = False
 
-fig, axs = plt.subplots(2, 2)
+fig, axs = plt.subplots(3, 2)
 
 ax1 = axs[0, 0]
 ax2 = axs[0, 1]
-ax3 = axs[1, 0]
 
 points = []
 centres = []
 
-# On choisit les centres
+# On choisit les medoides initiaux
 for ixe in range(nb_centres):
     coordonnees_point = (random.random() * 10, random.random() * 10)
     centres.append(coordonnees_point)
@@ -49,6 +51,7 @@ for centre_actuel in centres:
     ax1.scatter(centre_actuel[0], centre_actuel[1], color='y')
 
 # Définition d'un ratio d'aspect pour que le diagramme soit facilement lisible
+ax1.set_title('Build initial')
 ax1.set_aspect(1)
 
 # --------------------------------------
@@ -94,6 +97,7 @@ for x in medoides:
     ax2.scatter(x[0], x[1], color='#000', marker="+")
 
 # Définition d'un ratio d'aspect pour que le diagramme soit facilement lisible
+ax2.set_title('Medoides initiaux')
 ax2.set_aspect(1)
 
 # Calcul du cout de config pour la suite
@@ -101,21 +105,21 @@ for element in distances_medoides.values():
     for co_point_et_distance in element:
         config_cost += co_point_et_distance[1]
 
-print(f'Cout de config:{config_cost}')
+print(f'Cout de config initial:{config_cost}')
 
-#   POUR CHAQUE MEDOIDE M ET POUR CHAQUE POINT NON MEDOIDE O
-for m in medoides:
+# On va maintenant essayer de réduire le cout de configuration en échangeant les médoïdes
+# On va donc parcourir les médoïdes et pour chacun d'entre eux, on va parcourir les points
+for x in range(len(medoides)-1, -1, -1):
     for o in points:
         # les medoides sont dans le tableau des points donc on ne va pas calculer le cout d'echange du medoide avec lui meme
-        if m == o:
+        if medoides[x] == o:
             pass
         else:
-            # CONSIDERER L ECHANGE DE M ET O ET CALCULER LE COUT D ECHANGE
-            # copie profonde de medoides
+            # copie profonde de medoides puisque l'on va modifier la liste
             medoides_copie = copy.deepcopy(medoides)
-            # pop m
-            medoides_copie.pop(medoides.index(m))
-            # append o
+            # on supprime le medoide actuel
+            medoides_copie.pop(x)
+            # on ajoute le nouveau medoide
             medoides_copie.append(o)
             # calcul distances
             distances_medoides = {}  # Ce dictionnaire est de la forme clé = coordonnées d'un médoide et valeur = [[x, y], distance avec le medoide]
@@ -134,45 +138,54 @@ for m in medoides:
                 else:
                     distances_medoides[str(medoide[distances_point_to_centres.index(min_distance)])].append(
                         [[coordonnees_point[0], coordonnees_point[1]], min_distance])
-            # calcul cout
+
+            # calcul cout supposé
             for element in distances_medoides.values():
                 for co_point_et_distance in element:
                     supposed_cost += co_point_et_distance[1]
+
             if supposed_cost < config_cost:
+                # On supprime l'ancien médoide dans la liste itéré et on ajoute le nouveau
+                medoides.pop(x)
+                medoides.append(o)
+
                 couleur = ['r', 'g', 'b', 'c', 'm', 'y']
                 cles_dict = list(distances_medoides.keys())
 
+                # Selection du subplot
+                if subplots_col_pointer:
+                    ax_current = axs[subplots_row_pointer, 1]
+                    subplots_col_pointer = False
+                    subplots_row_pointer += 1
+                    subplots_counter += 1
+                else:
+                    ax_current = axs[subplots_row_pointer, 0]
+                    subplots_col_pointer = True
+                    subplots_counter += 1
+
+                # On place les points selon leur médoïde
                 for x in range(len(distances_medoides)):
                     couleur_actuelle = couleur[x]
                     for element in distances_medoides[cles_dict[x]]:
-                        ax3.scatter(element[0][0], element[0][1], color=couleur_actuelle, marker="x")
+                        ax_current.scatter(element[0][0], element[0][1], color=couleur_actuelle, marker="x")
 
                 # On place les médoïdes en forme de croix pour bien les repérer
-                for x in medoides:
-                    ax3.scatter(x[0], x[1], color='#000', marker="+")
+                for z in medoides_copie:
+                    ax_current.scatter(z[0], z[1], color='#000', marker="+")
 
-                ax3.set_aspect(1)
-                axs[1, 1].set_aspect(1)
-                print(f'Cout de config:{config_cost}')
-
-                plt.show()
-                plt.close()
-                exit()
+                ax_current.set_title(f'Swap {subplots_counter-2}')
+                ax_current.set_aspect(1)
+                print(f'Cout de config supposé:{supposed_cost}')
+                config_cost = supposed_cost  # On met à jour le cout de configuration
+                supposed_cost = 0  # On remet à 0 le cout supposé
             else:
-                exit()
+                # Le cout de configuration est plus grand que le cout supposé donc on arrête
+                break
 
+# On supprime les subplots inutiles
+for j in range(subplots_counter, len(axs.flatten())):
+    fig.delaxes(axs.flatten()[j])
 
-
-#       SI LE COUT EST LE MEILLEUR ACTUELLEMENT
-#           GARDER EN MEMOIRE LA COMBINAISON M ET O
-#   SI L ECHANGE DE M_MEILLEUR ET O_MEILLEUR REDUIT LA FONCTION DE COUT
-#       FAIRE L ECHANGE
-#   SINON
-#       ARRETER
-
-
-# plt.legend()
-'''
+plt.tight_layout()
 plt.show()
 plt.close()
-'''
