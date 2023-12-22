@@ -25,8 +25,8 @@ Le KNN (K-Nearest Neighbors) est un algorithme d'apprentissage supervisé. Il es
 
 == K-medoids
 
-Le K-medoids est un algorithme d'apprentissage non supervisé. Il est utilisé pour la classification. Pour en savoir plus, se rendre xref:k-medoids\README.adoc[ici].
+Le K-medoids est un algorithme d'apprentissage non supervisé. Il est utilisé pour la classification. Pour en savoir plus, se rendre xref:k-medoides\README.adoc[ici].
 
 == Apprentissage par renforcement
 
-L'apprentissage par renforcement est un type d'apprentissage qui permet à un agent d'apprendre à prendre des décisions intelligentes. Pour en savoir plus, se rendre xref:apprentissage-par-renforcement\README.adoc[ici].
+L'apprentissage par renforcement est un type d'apprentissage qui permet à un agent d'apprendre à prendre des décisions intelligentes. Pour en savoir plus, se rendre xref:neuro-car\README.adoc[ici].
