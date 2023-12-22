@@ -13,7 +13,20 @@ et par renforcement. Chacun de ces types a ses propres avantages,
 utilisés pour résoudre des problèmes comme la reconnaissance de motifs ou la prise
 de décisions intelligentes.
 
-Nous allons examiner de près des algorithmes associés à ces types d'apprentissages, en explorant des algorithmes populaires comme K-medoids, KNN (K-Nearest Neighbors). Ces algorithmes ont leurs propres caractéristiques, et ils sont utiles pour résoudre des problèmes différents.
+Nous allons examiner de près des algorithmes associés à ces types d'apprentissages et, bien que la librairie scikit-learn propose des implémentations de beaucoup d'algorithmes de machine learning, nous pensons qu'il est plus pertinent pour ce dossier d'essayer de reproduire de zéro des algorithmes populaires comme K-medoids, KNN (K-Nearest Neighbors).
 
-Par ailleurs, nous allons tenter de démontrer un algorithme d'apprentissage par renforcement, qui vise
-à apprendre à une voiture à faire des tours de circuit le plus vite possible.
+Par ailleurs, nous allons tenter de démontrer un algorithme d'apprentissage par renforcement, qui essaye d'apprendre à une voiture à faire des tours de circuit le plus vite possible.
+
+== KNN
+
+Le KNN (K-Nearest Neighbors) est un algorithme d'apprentissage supervisé. Il est utilisé pour la classification et la régression. Dans ce dossier, nous allons nous concentrer sur la classification. Pour en savoir plus, se rendre xref:k-voisins\README.adoc[ici].
+
+
+
+== K-medoids
+
+Le K-medoids est un algorithme d'apprentissage non supervisé. Il est utilisé pour la classification. Pour en savoir plus, se rendre xref:k-medoids\README.adoc[ici].
+
+== Apprentissage par renforcement
+
+L'apprentissage par renforcement est un type d'apprentissage qui permet à un agent d'apprendre à prendre des décisions intelligentes. Pour en savoir plus, se rendre xref:apprentissage-par-renforcement\README.adoc[ici].

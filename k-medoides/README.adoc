@@ -1,20 +1,20 @@
-= Partitionnement par k-médoïdes
-:toc:
+= Apprentissage non supervisé
 
-== Introduction
-L'algorithme des k-médoïdes est un algorithme de partionnnement qui vise à diviser un ensemble de données donné en k groupes. Contrairement à l'algorithme des k-moyennes, qui utilise la moyenne des points de données comme centre de groupe, l'algorithme des k-médoïdes utilise les points de données réels comme centres de groupe, en choisissant spécifiquement k points représentatifs de l'ensemble de données.
+L'apprentissage non supervisé est une branche de l'apprentissage automatique qui vise à découvrir des structures et des modèles cachés dans les données sans l'aide d'étiquettes ou de réponses préexistantes. Contrairement à l'apprentissage supervisé, où les données sont étiquetées, l'apprentissage non supervisé explore les données pour trouver des schémas et des relations intrinsèques.
 
-== Fonctionnement de l'algorithme
-L'algorithme fonctionne comme suit :
+L'un des algorithmes les plus couramment utilisés en apprentissage non supervisé est l'algorithme des k-médoides.
 
-. Initialiser k médoïdes de manière aléatoire à partir de l'ensemble de données.
-. Attribuer chaque point de données au médoïde le plus proche sur la base d'une méthode de distance (ici, la distance euclidienne).
-. Pour chaque médoïde, calculer le coût total de l'affectation de tous les points de données à ce médoïde.
-. Remplacer un point de données non médoïde par un médoïde et calculer le nouveau coût total.
-. Si le nouveau coût total est inférieur, conserver l'échange. Dans le cas contraire, annuler l'échange.
-. Répéter les étapes 2 à 5 jusqu'à convergence (c'est-à-dire qu'il n'y a plus d'échanges).
-. Les médioïdes finaux représentent les groupes.
+== L'algorithme des k-médoides
 
-L'algorithme des k-médoïdes présente plusieurs avantages par rapport à celui des k-moyennes, notamment une plus grande résistance aux valeurs aberrantes et la possibilité de traiter des mesures de distance non euclidiennes. Cependant, il peut s'avérer coûteux en termes de calcul, en particulier pour les grands ensembles de données.
+L'algorithme des k-médoides est une méthode de clustering qui vise à partitionner un ensemble de données non catégorisé en k groupes distincts. Il est basé sur la notion de médoides, qui sont des points de données représentatifs de chaque catégorie.
 
-A noter qu'il ne s'agit que d'un aperçu de haut niveau de l'algorithme k-medoids. Il existe des variantes et des optimisations qui peuvent être appliquées en fonction des exigences et des contraintes spécifiques du problème en question.
+L'algorithme des k-médoides fonctionne de la manière suivante :
+
+1. Sélectionner aléatoirement k points de données comme médoides initiaux.
+2. Assigner chaque point de données au médoide le plus proche.
+3. Pour chaque groupe, calculer le médioide en remplaçant le médioide actuel par le point de données qui minimise la somme des distances aux autres points du groupe.
+4. Répéter les étapes 2 et 3 jusqu'à ce que les médoides convergent.
+
+L'algorithme des k-médoides est largement utilisé dans divers domaines, tels que la segmentation d'images, l'analyse de données et la recommandation de produits.
+
+== L'algorithmes des k-médoides en Python
