@@ -16,6 +16,7 @@ public class ViewPanel extends JPanel implements Runnable {
     private final double thicknessSensitivity = 3.0;
     private final double angleSensitivity = 0.2;
     private final boolean loadByDefault = true;
+    public boolean DEBUG = true;
     private Color grassColor = new Color(0, 150, 0);
     public Track track;
     private InputHandler inputs;
@@ -34,7 +35,7 @@ public class ViewPanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(width, height));
         this.track = new Track();
 
-        this.inputs = new InputHandler();
+        this.inputs = new InputHandler(this);
         this.addKeyListener(inputs); 
         this.setFocusable(true);
 
@@ -102,6 +103,10 @@ public class ViewPanel extends JPanel implements Runnable {
 
     public void respawnCar() {
         this.car = new Car(this);
+    }
+
+    public void toggleDebug() {
+        this.DEBUG = !this.DEBUG;
     }
 
     private void addTrackPiece(int x, int y, double a) {

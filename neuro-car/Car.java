@@ -24,7 +24,7 @@ public class Car {
         this.spd = new Vector(0, 0);
         this.angle = 0;
         this.owner = owner;
-        this.brain = new Brain(raycasts.length+1, 6, 6, 2);
+        this.brain = new Brain(raycasts.length+1, 5, 4, 2);
         this.brain.randomize();
 
         this.updateHitbox();
@@ -189,11 +189,13 @@ public class Car {
         double x = Math.cos(Math.PI/6) * this.size;
         double y = Math.sin(Math.PI/6) * this.size;
 
-        g.setColor(Color.yellow);
-        for (Point p : this.intersects) {
-            if (p != null) {
-                g.fillRect((int) p.x - 2, (int) p.y - 2, 4, 4);
-                g.drawLine((int) pos.x, (int) pos.y, (int) p.x, (int) p.y);
+        if (this.owner.DEBUG) {
+            g.setColor(Color.yellow);
+            for (Point p : this.intersects) {
+                if (p != null) {
+                    g.fillRect((int) p.x - 2, (int) p.y - 2, 4, 4);
+                    g.drawLine((int) pos.x, (int) pos.y, (int) p.x, (int) p.y);
+                }
             }
         }
 
@@ -204,7 +206,7 @@ public class Car {
         g.rotate(-this.angle);
         g.translate(-this.pos.x, -this.pos.y);
 
-        this.brain.paint(g);
+        if (this.owner.DEBUG) this.brain.paint(g);
     }
 
 }

@@ -34,7 +34,7 @@ public class Brain {
         g.setColor(Color.black);
 
         Point[] currentInputs = new Point[layers[0].nbIn];
-        double xOff = sep*2;
+        double xOff = sep;
         double yOff = sep + ((biggestLay - layers[0].nbIn * 1.0) * sep/2);
         for (int i = 0; i < layers[0].nbIn; i++) {
             g.fillRect((int) xOff - 2, (int) yOff - 2, 4, 4);
@@ -67,9 +67,9 @@ public class Brain {
         if (weight > 1) weight = 1;
         if (weight < -1) weight = -1;
         if (weight >= 0) {
-            return new Color((float) 1, (float) (1-weight), (float) (1-weight));
+            return new Color((float) 1, (float) (1-weight), (float) (1-weight), (float) weight);
         } else {
-            return new Color((float) (1-(weight * -1)), (float) (1-(weight * -1)), 1);
+            return new Color((float) (1-(weight * -1)), (float) (1-(weight * -1)), 1, (float) weight * -1);
         }
     }
 
