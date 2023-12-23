@@ -1,0 +1,19 @@
+= Dossier sur le machine learning
+Quentin Beaufort <quentin.bfrt@gmail.com>; Pierre de Beaumont <pierre.db333@gmail.com>
+
+:toc:
+
+== Introduction
+
+Le Machine Learning est un des piliers de l'intelligence artificielle. Il permet à nos ordinateurs de tirer des leçons à partir des données, créant ainsi des modèles qui représentent des phénomènes du monde réel. Ces modèles apprennent et s'améliorent avec le temps, changeant la donne par rapport à la programmation classique.
+
+Dans ce dossier, nous allons explorer les bases du Machine Learning,
+en se focalisant sur les types d'apprentissage : supervisé, non supervisé,
+et par renforcement. Chacun de ces types a ses propres avantages,
+utilisés pour résoudre des problèmes comme la reconnaissance de motifs ou la prise
+de décisions intelligentes.
+
+Nous allons examiner de près des algorithmes associés à ces types d'apprentissages, en explorant des algorithmes populaires comme K-medoids, KNN (K-Nearest Neighbors). Ces algorithmes ont leurs propres caractéristiques, et ils sont utiles pour résoudre des problèmes différents.
+
+Par ailleurs, nous allons tenter de démontrer un algorithme d'apprentissage par renforcement, qui vise
+à apprendre à une voiture à faire des tours de circuit le plus vite possible.
