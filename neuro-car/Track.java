@@ -95,14 +95,14 @@ public class Track {
     public void close() {
         this.innerTrack = new Polygon();
         for (Line l : this.innerLines) {
-            this.innerTrack.addPoint(l.a.x, l.a.y);
-            this.innerTrack.addPoint(l.b.x, l.b.y);
+            this.innerTrack.addPoint((int) l.a.x, (int) l.a.y);
+            this.innerTrack.addPoint((int) l.b.x, (int) l.b.y);
         }
         
         this.outerTrack = new Polygon();
         for (Line l : this.outerLines) {
-            this.outerTrack.addPoint(l.a.x, l.a.y);
-            this.outerTrack.addPoint(l.b.x, l.b.y);
+            this.outerTrack.addPoint((int) l.a.x, (int) l.a.y);
+            this.outerTrack.addPoint((int) l.b.x, (int) l.b.y);
         }
         this.closed = true;
     }
@@ -120,10 +120,10 @@ public class Track {
         } else {
             graph.setColor(Color.BLACK);
             for(Line l : this.innerLines) {
-                graph.drawLine(l.a.x, l.a.y, l.b.x, l.b.y);
+                graph.drawLine((int) l.a.x, (int) l.a.y, (int) l.b.x, (int) l.b.y);
             }
             for(Line l : this.outerLines) {
-                graph.drawLine(l.a.x, l.a.y, l.b.x, l.b.y);
+                graph.drawLine((int) l.a.x, (int) l.a.y, (int) l.b.x, (int) l.b.y);
             }
         }
     }

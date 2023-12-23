@@ -17,7 +17,7 @@ public class ViewPanel extends JPanel implements Runnable {
     private final double angleSensitivity = 0.2;
     private final boolean loadByDefault = true;
     private Color grassColor = new Color(0, 150, 0);
-    private Track track;
+    public Track track;
     private InputHandler inputs;
     private Thread gameThread;
     private boolean gameRunning = true;
@@ -100,6 +100,10 @@ public class ViewPanel extends JPanel implements Runnable {
         this.gameThread.start();
     }
 
+    public void respawnCar() {
+        this.car = new Car(this);
+    }
+
     private void addTrackPiece(int x, int y, double a) {
         if (this.currentPoint == null) return;
         this.trackPieceId++;
@@ -115,14 +119,14 @@ public class ViewPanel extends JPanel implements Runnable {
     }
 
     private void closeTrack() {
-        int lastInnerX = (int) (currentPoint.x + Math.cos(lastAngle) * lastThickness);
-        int lastInnerY = (int) (currentPoint.y + Math.sin(lastAngle) * lastThickness);
-        int lastOuterX = (int) (currentPoint.x - Math.cos(lastAngle) * lastThickness);
-        int lastOuterY = (int) (currentPoint.y - Math.sin(lastAngle) * lastThickness);
-        int newInnerX = this.track.innerLines.get(0).a.x;
-        int newInnerY = this.track.innerLines.get(0).a.y;
-        int newOuterX = this.track.outerLines.get(0).b.x;
-        int newOuterY = this.track.outerLines.get(0).b.y;
+        double lastInnerX = (currentPoint.x + Math.cos(lastAngle) * lastThickness);
+        double lastInnerY = (currentPoint.y + Math.sin(lastAngle) * lastThickness);
+        double lastOuterX = (currentPoint.x - Math.cos(lastAngle) * lastThickness);
+        double lastOuterY = (currentPoint.y - Math.sin(lastAngle) * lastThickness);
+        double newInnerX = this.track.innerLines.get(0).a.x;
+        double newInnerY = this.track.innerLines.get(0).a.y;
+        double newOuterX = this.track.outerLines.get(0).b.x;
+        double newOuterY = this.track.outerLines.get(0).b.y;
 
         this.track.innerLines.set(this.trackPieceId, new Line(lastInnerX, lastInnerY, newInnerX, newInnerY));
         this.track.outerLines.set(this.trackPieceId, new Line(lastOuterX, lastOuterY, newOuterX, newOuterY));
@@ -140,14 +144,14 @@ public class ViewPanel extends JPanel implements Runnable {
                 if (this.inputs.spaceDown) this.closeTrack();
                 while (track.innerLines.size() < trackPieceId+1) track.innerLines.add(new Line());
                 while (track.outerLines.size() < trackPieceId+1) track.outerLines.add(new Line());
-                int lastInnerX = (int) (currentPoint.x + Math.cos(lastAngle) * lastThickness);
-                int lastInnerY = (int) (currentPoint.y + Math.sin(lastAngle) * lastThickness);
-                int lastOuterX = (int) (currentPoint.x - Math.cos(lastAngle) * lastThickness);
-                int lastOuterY = (int) (currentPoint.y - Math.sin(lastAngle) * lastThickness);
-                int newInnerX = (int) (mouseX + Math.cos(currentAngle) * currentThickness);
-                int newInnerY = (int) (mouseY + Math.sin(currentAngle) * currentThickness);
-                int newOuterX = (int) (mouseX - Math.cos(currentAngle) * currentThickness);
-                int newOuterY = (int) (mouseY - Math.sin(currentAngle) * currentThickness);
+                double lastInnerX = (currentPoint.x + Math.cos(lastAngle) * lastThickness);
+                double lastInnerY = (currentPoint.y + Math.sin(lastAngle) * lastThickness);
+                double lastOuterX = (currentPoint.x - Math.cos(lastAngle) * lastThickness);
+                double lastOuterY = (currentPoint.y - Math.sin(lastAngle) * lastThickness);
+                double newInnerX = (mouseX + Math.cos(currentAngle) * currentThickness);
+                double newInnerY = (mouseY + Math.sin(currentAngle) * currentThickness);
+                double newOuterX = (mouseX - Math.cos(currentAngle) * currentThickness);
+                double newOuterY = (mouseY - Math.sin(currentAngle) * currentThickness);
                 try {
                     track.innerLines.set(trackPieceId, new Line(lastInnerX, lastInnerY, newInnerX, newInnerY));
                     track.outerLines.set(trackPieceId, new Line(lastOuterX, lastOuterY, newOuterX, newOuterY));
@@ -159,13 +163,14 @@ public class ViewPanel extends JPanel implements Runnable {
                 this.newTrack();
             }
             if (this.track.closed && this.car == null) {
-                this.car = new Car();
+                this.car = new Car(this);
             }
 
             if (this.inputs.z) this.car.accelerate(1);
             if (this.inputs.s) this.car.accelerate(-1);
-            if (this.inputs.q) this.car.rotate(-1);
-            if (this.inputs.d) this.car.rotate(1);
+            if (this.inputs.q) this.car.steer(-0.2);
+            if (this.inputs.d) this.car.steer(0.2);
+            if (this.car != null && this.inputs.spaceDown) this.respawnCar();
             this.car.update();
             this.repaint();
 
