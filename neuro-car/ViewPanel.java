@@ -145,6 +145,7 @@ public class ViewPanel extends JPanel implements Runnable {
 
             long start = System.nanoTime();
 
+            this.repaint();
             if (!this.track.closed && currentPoint != null) {
                 if (this.inputs.spaceDown) this.closeTrack();
                 while (track.innerLines.size() < trackPieceId+1) track.innerLines.add(new Line());
@@ -176,12 +177,11 @@ public class ViewPanel extends JPanel implements Runnable {
             if (this.inputs.q) this.car.steer(-0.2);
             if (this.inputs.d) this.car.steer(0.2);
             if (this.car != null && this.inputs.spaceDown) this.respawnCar();
-            this.car.update();
-            this.repaint();
+            if (this.car != null) this.car.update();
 
             long end = System.nanoTime();
             long delay = (1000000000 / this.FPS) - (end - start);
-            //System.out.println("DeltaTime : " + ((end - start)/1000) + "mms, for " + this.FPS + " fps");
+            // System.out.println("DeltaTime : " + ((end - start)/1000) + "mms, for " + this.FPS + " fps");
             try {
                 Thread.sleep(delay/1000000);
             } catch (Exception e) {}

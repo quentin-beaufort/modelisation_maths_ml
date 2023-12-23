@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 
 public class Car {
     
-    private final double steeringForce = 0.3;
+    private final double steeringForce = 0.4;
     private final double accel = 0.5;
     private final double friction = 0.04;
     private final Color carColor = Color.RED;
@@ -16,16 +16,18 @@ public class Car {
     public Line[] hitbox = new Line[6];
     public Line[] raycasts = new Line[7];
     public Point[] intersects = new Point[7];
-    public boolean alive = true;
     public Brain brain;
+    public Brain bestBrain;
+    public long birth;
+    public long bestLifeSpan = 0;
 
     Car(ViewPanel owner) {
-        this.pos = new Vector(this.spawnX, this.spawnY);
-        this.spd = new Vector(0, 0);
-        this.angle = 0;
+        this.respawn();
         this.owner = owner;
-        this.brain = new Brain(raycasts.length+1, 5, 4, 2);
+        this.brain = new Brain(raycasts.length+1, 3, 3, 1);
         this.brain.randomize();
+        this.bestBrain = new Brain(this.brain);
+        this.birth = System.nanoTime();
 
         this.updateHitbox();
         this.updateRaycasts();
@@ -48,14 +50,14 @@ public class Car {
         for (Line l : this.owner.track.innerLines) {
             for (Line h : this.hitbox) {
                 if (l.intersect(h) != null) {
-                    this.die();
+                    this.updateAI();
                 }
             }
         }
         for (Line l : this.owner.track.outerLines) {
             for (Line h : this.hitbox) {
                 if (l.intersect(h) != null) {
-                    this.die();
+                    this.updateAI();
                 }
             }
         }
@@ -96,13 +98,9 @@ public class Car {
         }
     }
 
-    public void die() {
-        this.alive = false;
-        this.owner.respawnCar();
-    }
-
     public void update() {
-        if (!this.alive) return;
+        if (Double.isNaN(this.pos.x) || Double.isNaN(this.pos.y)) this.respawn();
+        this.accelerate(1);
         this.act();
         this.pos.add(this.spd);
         this.spd.setHeading(this.angle);
@@ -112,6 +110,32 @@ public class Car {
         this.updateRaycasts();
         this.castRays();
         this.checkCollision();
+    }
+
+    public void updateAI() {
+        long death = System.nanoTime();
+        long lifeSpan = death - this.birth;
+        if (lifeSpan > this.bestLifeSpan) {
+            this.bestLifeSpan = lifeSpan;
+            this.bestBrain = new Brain(this.brain);
+            this.mutate();
+        } else {
+            this.brain = new Brain(this.bestBrain);
+            this.mutate();
+        }
+    }
+
+    public void mutate() {
+        this.bestBrain = new Brain(brain);
+        this.brain.mutate();
+        this.respawn();
+    }
+
+    public void respawn() {
+        this.pos = new Vector(this.spawnX, this.spawnY);
+        this.spd = new Vector(0, 0);
+        this.angle = 0;
+        this.birth = System.nanoTime();
     }
 
     public void act() {
@@ -126,8 +150,7 @@ public class Car {
         inputs[raycasts.length] = this.spd.mag();
 
         double[] actions = this.brain.think(inputs);
-        this.accelerate(actions[0]);
-        this.steer(actions[1]);
+        this.steer(actions[0]);
     }
 
     public void updateRaycasts() {
@@ -162,16 +185,16 @@ public class Car {
     }
 
     public void updateHitbox() {
-        Vector diag1 = new Vector(this.size, 0);
+        Vector diag1 = new Vector(this.size * 0.9, 0);
         diag1.rotate(Math.PI * (5.0/6.0));
         diag1.rotate(this.angle);
-        Vector diag2 = new Vector(this.size, 0);
+        Vector diag2 = new Vector(this.size * 0.9, 0);
         diag2.rotate(Math.PI * (1.0/6.0));
         diag2.rotate(this.angle);
-        Vector diag3 = new Vector(this.size, 0);
+        Vector diag3 = new Vector(this.size * 0.9, 0);
         diag3.rotate(Math.PI * (11.0/6.0));
         diag3.rotate(this.angle);
-        Vector diag4 = new Vector(this.size, 0);
+        Vector diag4 = new Vector(this.size * 0.9, 0);
         diag4.rotate(Math.PI * (7.0/6.0));
         diag4.rotate(this.angle);
 
@@ -184,20 +207,18 @@ public class Car {
     }
 
     public void paint(Graphics2D g) {
-        if (!this.alive) return;
-
-        double x = Math.cos(Math.PI/6) * this.size;
-        double y = Math.sin(Math.PI/6) * this.size;
-
         if (this.owner.DEBUG) {
             g.setColor(Color.yellow);
             for (Point p : this.intersects) {
                 if (p != null) {
                     g.fillRect((int) p.x - 2, (int) p.y - 2, 4, 4);
-                    g.drawLine((int) pos.x, (int) pos.y, (int) p.x, (int) p.y);
+                    // g.drawLine((int) pos.x, (int) pos.y, (int) p.x, (int) p.y);
                 }
             }
         }
+
+        double x = Math.cos(Math.PI/6) * this.size;
+        double y = Math.sin(Math.PI/6) * this.size;
 
         g.translate(this.pos.x, this.pos.y);
         g.rotate(this.angle);
@@ -207,6 +228,10 @@ public class Car {
         g.translate(-this.pos.x, -this.pos.y);
 
         if (this.owner.DEBUG) this.brain.paint(g);
+        if (this.owner.DEBUG) {
+            long bestLS = this.bestLifeSpan / 1000000;
+            g.setColor(Color.black);
+            g.drawString("Best life span : " + bestLS + "ms", 15, 15);
+        }
     }
-
 }

@@ -11,6 +11,21 @@ public class Layer {
         this.biases = new double[nbOut];
     }
 
+    Layer(Layer layer) {
+        this.nbIn = layer.nbIn;
+        this.nbOut = layer.nbOut;
+        this.weights = new double[nbIn][nbOut];
+        this.biases = new double[nbOut];
+        for (int i = 0; i < nbOut; i++) {
+            this.biases[i] = layer.biases[i];
+        }
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights[i].length; j++) {
+                this.weights[i][j] = layer.weights[i][j];
+            }
+        }
+    }
+
     public double[] activate(double[] inputs) {
         double[] outputs = new double[nbOut];
         for (int out = 0; out < nbOut; out++) {

@@ -3,12 +3,20 @@ import java.awt.Graphics2D;
 
 public class Brain {
 
+    private final double mutationRate = 0.01;
     public Layer[] layers;
 
     Brain(int... layerSizes) {
         this.layers = new Layer[layerSizes.length - 1];
         for (int i = 0; i < layers.length; i++) {
             layers[i] = new Layer(layerSizes[i], layerSizes[i+1]);
+        }
+    }
+
+    Brain(Brain brain) {
+        this.layers = new Layer[brain.layers.length];
+        for (int i = 0; i < layers.length; i++) {
+            this.layers[i] = new Layer(brain.layers[i]);
         }
     }
 
@@ -22,6 +30,25 @@ public class Brain {
     public void randomize() {
         for (Layer l : layers) {
             l.randomize();
+        }
+    }
+
+    public void mutate() {
+        for (Layer l : layers) {
+            for (int i = 0; i < l.biases.length; i++) {
+                if (Math.random() < this.mutationRate) {
+                    l.biases[i] = (Math.random() * 2) - 1;
+                }
+            }
+            for (int i = 0; i < l.weights.length; i++) {
+                for (int j = 0; j < l.weights[i].length; j++) {
+                    if (Math.random() < this.mutationRate) {
+                        l.weights[i][j] = (Math.random() * 2) - 1;
+                        if (l.weights[i][j] > 1) l.weights[i][j] = 1;
+                        if (l.weights[i][j] < -1) l.weights[i][j] = -1;
+                    }
+                }
+            }
         }
     }
 
