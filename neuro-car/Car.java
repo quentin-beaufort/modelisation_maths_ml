@@ -144,7 +144,7 @@ public class Car {
             if (this.intersects[i] != null) {
                 inputs[i] = intersects[i].dist(pos);
             } else {
-                inputs[i] = 1;
+                inputs[i] = this.reach;
             }
         }
         inputs[raycasts.length] = this.spd.mag();
